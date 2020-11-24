@@ -10,7 +10,7 @@ from flask import Flask
 df = pd.read_excel('/data/StoneMasonryDatabase.xls', index_col=None)
 
 app=dash.Dash(__name__)
- server = app.server()
+server = app.server()
 
 
 # def read_data(input_dir):
