@@ -31,12 +31,21 @@ figI = fig4i.functionfigI()
 #Creating web app design:
 app.layout = html.Div()
 app.layout = html.Div(children=[
+    html.Div(className='header',
+             children=[
+                 html.H1(['EESD - Stonmasonry Data'], style={'textAlign': 'center'}),
+                 html.P([
+                            '''This web page presents data from a database of shear-compression tests on stone masonry walls.''',
+                            #html.Br(),
+                            ''' 6 graphs have been produced to visualise the distribution with regard to various parameters.''',
+                            #html.Br(),
+                            '''The colours refer to the masonry typology (see figure A).''']),
+                 html.P('''Pick one or more versions from the dropdown below.''')]
+             )
+    ,
     html.Div(className='row',
              children=[
                  html.Div(className='four columns div-user-controls', children=[
-                     html.H2('EESD - Stonmasonry Data'),
-                     html.P('''Visualising data with Plotly - Dash'''),
-                     html.P('''Pick one or more versions from the dropdown below.'''),
                      html.Div(className='div-for-DropDown',
                               children=[
                                   dcc.Dropdown(id='versionSelector',
