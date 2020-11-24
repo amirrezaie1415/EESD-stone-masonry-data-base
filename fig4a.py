@@ -83,7 +83,13 @@ def functionfigA():
                            'x': 0.5,
                            'xanchor': 'center',
                            'yanchor': 'top'
-                            }
+                       },
+                       'xaxis':{
+                           "title": " ",
+                       },
+                       'yaxis':{
+                           "title": "# Tests"
+                       }
                        }
                       )
 

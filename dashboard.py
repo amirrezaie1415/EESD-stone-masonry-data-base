@@ -53,7 +53,7 @@ app.layout = html.Div(children=[
                                                    {'label': 'Version 1', 'value':'version 1'},
                                                    {'label': 'Version 2', 'value': 'version 2'},
                                                ],
-                                               value=['Version 1'],
+                                               value='version 1',
                                                className='versionSelector')
                                   ])
                  ]),
