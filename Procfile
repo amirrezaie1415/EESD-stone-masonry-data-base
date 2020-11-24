@@ -1,1 +1,1 @@
-web: gunicorn plotly-dashboard.py:server
+web: gunicorn plotly-dashboard:server
