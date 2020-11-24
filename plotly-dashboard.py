@@ -1,3 +1,4 @@
+import os
 import dash
 import dash_html_components as html
 import plotly.express as px
@@ -10,7 +11,7 @@ from flask import Flask
 df = pd.read_excel('data/StoneMasonryDatabase.xls', index_col=None)
 
 app=dash.Dash(__name__)
-server = app.server()
+server = app.server
 
 
 # def read_data(input_dir):
