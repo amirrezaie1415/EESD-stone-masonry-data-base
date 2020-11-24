@@ -7,7 +7,7 @@ import pandas as pd
 import math
 from flask import Flask
 
-df = pd.read_excel('/data/StoneMasonryDatabase.xls', index_col=None)
+df = pd.read_excel('data/StoneMasonryDatabase.xls', index_col=None)
 
 app=dash.Dash(__name__)
 server = app.server()
