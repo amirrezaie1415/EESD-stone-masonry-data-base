@@ -1,1 +1,1 @@
-web: gunicorn plotly-dashboard:server
+web: gunicorn dashboard:server
