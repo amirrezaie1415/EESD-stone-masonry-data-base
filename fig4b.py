@@ -8,9 +8,7 @@ from flask import Flask
 import read_data
 
 
-def functionfigB():
-    df = read_data.read_data()
-
+def functionfigB(df):
     # Selecting only the columns of interest
     df = df[['ID', 'Stone masonry typology', 'H [mm]']].copy()
 

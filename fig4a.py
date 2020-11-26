@@ -9,9 +9,7 @@ import math
 from flask import Flask
 import read_data
 
-def functionfigA():
-    df = read_data.read_data()
-
+def functionfigA(df):
     # Selecting only the columns of interest
     df = df[['ID', 'Stone masonry typology', 'Lab / In-situ', 'H [mm]']].copy()
 

@@ -7,7 +7,9 @@ import dash_core_components as dcc
 import pandas as pd
 import math
 from flask import Flask
+from dash.dependencies import Input, Output
 
+import read_data
 import fig4a
 import fig4b
 import fig4c
@@ -15,17 +17,35 @@ import fig4f
 import fig4h
 import fig4i
 
+
+#Initialising the web app and design
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app=dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
+
+#Handling the different versions and dropdown bar
+df = read_data.read_data()
+versions = df['Version'].unique() #returns an array of all the version dates, ascending.
+version_dict = {}
+for i in range(0,len(versions)):
+    int = (i+1)
+    int= str(int)
+    version_dict[i] = {'label': 'Version '+ int, 'value': versions[i]}
+
+options = [value for key, value in version_dict.items()]
+
+current_df = df[df['Version']==versions[1]]
+
+
+
 #Calling all figures from different Python files:
-figA = fig4a.functionfigA()
-figB = fig4b.functionfigB()
-figC = fig4c.functionfigC()
-figF = fig4f.functionfigF()
-figH = fig4h.functionfigH()
-figI = fig4i.functionfigI()
+figA = fig4a.functionfigA(current_df)
+figB = fig4b.functionfigB(current_df)
+figC = fig4c.functionfigC(current_df)
+figF = fig4f.functionfigF(current_df)
+figH = fig4h.functionfigH(current_df)
+figI = fig4i.functionfigI(current_df)
 
 
 #Creating web app design:
@@ -33,14 +53,19 @@ app.layout = html.Div()
 app.layout = html.Div(children=[
     html.Div(className='header',
              children=[
-                 html.H1(['EESD - Stonmasonry Data'], style={'textAlign': 'center'}),
+                 html.H1(['Database of quasi-static cyclic tests on stone masonry walls'], style={'textAlign': 'center'}),
                  html.P([
-                            '''This web page presents data from a database of shear-compression tests on stone masonry walls.''',
-                            #html.Br(),
-                            ''' 6 graphs have been produced to visualise the distribution with regard to various parameters.''',
-                            #html.Br(),
-                            '''The colours refer to the masonry typology (see figure A).''']),
-                 html.P('''Pick one or more versions from the dropdown below.''')]
+                     '''The paper Vanin et al. (2017) "Estimates for the stiffness, strength and drift capacity of stone masonry walls based on 123 quasi-static cyclic tests reported in the literature" contains a database of quasi-static cyclic tests on stone masonry walls. This database is maintained and updated as new test results become available. This web application allows to display graphs, which show the important parameters and their distribution within the database for the updated versions of the database. These plots reproduce subplots of Figure 4 in the paper.''',
+                     html.Br(),
+                     html.Br(),
+                     '''Please cite the paper and database as follows:''',
+                     html.Br(),
+                     '''Paper: Vanin F., Zaganelli D., Penna A., Beyer K. (2017). Estimates for the stiffness, strength and drift capacity of stone masonry walls based on 123 quasi-static cyclic tests reported in the literature. Bull Earthquake Eng 15, 5435–5479 (2017). https://doi.org/10.1007/s10518-017-0188-5''',
+                     html.Br(),
+                     '''Database: Vanin F., Zaganelli D., Penna A., Beyer K. (2017). Data set to "Estimates for the stiffness, strength and drift capacity of stone masonry walls based on 123 quasi-static cyclic tests reported in the literature". Accessed on xx.xx.20xx  http://doi.org/10.5281/zenodo.812145''']),
+                 html.Br(),
+                 html.Br(),
+                 html.P('''Select which verion of the database to view.''')]
              )
     ,
     html.Div(className='row',
@@ -49,11 +74,8 @@ app.layout = html.Div(children=[
                      html.Div(className='div-for-DropDown',
                               children=[
                                   dcc.Dropdown(id='versionSelector',
-                                               options=[
-                                                   {'label': 'Version 1', 'value':'version 1'},
-                                                   {'label': 'Version 2', 'value': 'version 2'},
-                                               ],
-                                               value='version 1',
+                                               options=options,
+                                               value=versions[0],
                                                className='versionSelector')
                                   ])
                  ]),
@@ -91,6 +113,27 @@ app.layout = html.Div(children=[
                  ])
              ])
 ])
+@app.callback(
+    dash.dependencies.Output('figA','figure'),
+    dash.dependencies.Output('figB', 'figure'),
+    dash.dependencies.Output('figC','figure'),
+    dash.dependencies.Output('figF','figure'),
+    dash.dependencies.Output('figH','figure'),
+    dash.dependencies.Output('figI','figure'),
+    [dash.dependencies.Input('versionSelector', 'value')])
+def update_graphs(version_value):
+    print(version_value)
+    current_df = df[df['Version'] == version_value]
+    print(current_df)
+    return fig4a.functionfigA(current_df),\
+           fig4b.functionfigB(current_df),\
+           fig4c.functionfigC(current_df),\
+           fig4f.functionfigF(current_df),\
+           fig4h.functionfigH(current_df),\
+           fig4i.functionfigI(current_df)
+
+
+
 if __name__ =='__main__':
     app.run_server(debug=True)
 

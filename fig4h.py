@@ -9,20 +9,17 @@ from flask import Flask
 import read_data
 
 
-def functionfigH():
-    df = read_data.read_data()
-
+def functionfigH(df):
     dfH = df[['ID', 'Stone masonry typology', 'fc [MPa]', 'IQMip']].copy()
     dfH.sort_values(by=['Stone masonry typology'],inplace=True)
 
     # Creating the column which will contain the values of N
     X = 1
     Y = 1
-
+    N = 2
     for index, row in dfH.iterrows():
         X = 1
         Y = 1
-        N = 2
         if (row['IQMip'] == 'NaN'):
             X = 0
         else:
@@ -33,8 +30,6 @@ def functionfigH():
             Y = 1
         if (X + Y < 2):
             N = 1
-        else:
-            N = 2
         dfH['N'] = math.sqrt(N) * 12
     figure = px.scatter(
         dfH,

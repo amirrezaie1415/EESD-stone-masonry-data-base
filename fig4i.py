@@ -9,8 +9,7 @@ from flask import Flask
 
 import read_data
 
-def functionfigI():
-    df = read_data.read_data()
+def functionfigI(df):
 
     dfI = df.copy()
     dfI.sort_values(by=['Stone masonry typology'], inplace=True)
