@@ -12,7 +12,7 @@ import json
 # !!! Files are sorted by Version, which should follow the format YYYY.MM.DD
 
 def read_data():
-    doi = '10.5281/zenodo.812145'
+    doi = "10.5281/zenodo.812145"
     url = 'https://doi.org/' + doi
     r = requests.get(url)
     recordID = r.url.split('/')[-1]
