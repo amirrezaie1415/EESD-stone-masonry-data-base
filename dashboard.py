@@ -1,3 +1,4 @@
+#import all dependencies
 import os
 import dash
 import dash_html_components as html
@@ -9,6 +10,7 @@ import math
 from flask import Flask
 from dash.dependencies import Input, Output
 
+#Import other python files
 import read_data
 import fig4a
 import fig4b
@@ -33,13 +35,12 @@ for i in range(0,len(versions)):
     int= str(int)
     version_dict[i] = {'label': 'Version '+ int, 'value': versions[i]}
 
+#Create a dictionary that will have dropdown bar data
 options = [value for key, value in version_dict.items()]
 
+
+#Calling all figures from different Python files with initial Version of database:
 current_df = df[df['Version']==versions[1]]
-
-
-
-#Calling all figures from different Python files:
 figA = fig4a.functionfigA(current_df)
 figB = fig4b.functionfigB(current_df)
 figC = fig4c.functionfigC(current_df)
@@ -48,9 +49,10 @@ figH = fig4h.functionfigH(current_df)
 figI = fig4i.functionfigI(current_df)
 
 
-#Creating web app design:
+#Write the web page separations, graphs and text:
 app.layout = html.Div()
 app.layout = html.Div(children=[
+    #This part is the title and initial paragraph
     html.Div(className='header',
              children=[
                  html.H1(['Database of quasi-static cyclic tests on stone masonry walls'], style={'textAlign': 'center'}),
@@ -65,9 +67,10 @@ app.layout = html.Div(children=[
                      '''Database: Vanin F., Zaganelli D., Penna A., Beyer K. (2017). Data set to "Estimates for the stiffness, strength and drift capacity of stone masonry walls based on 123 quasi-static cyclic tests reported in the literature". Accessed on xx.xx.20xx  http://doi.org/10.5281/zenodo.812145''']),
                  html.Br(),
                  html.Br(),
-                 html.P('''Select which verion of the database to view.''')]
+                 html.P('''Select which version of the database to view.''')]
              )
     ,
+    #This part consists of the dropdown bar on the left side and all the figures on the right.
     html.Div(className='row',
              children=[
                  html.Div(className='four columns div-user-controls', children=[
@@ -113,6 +116,8 @@ app.layout = html.Div(children=[
                  ])
              ])
 ])
+
+#Section to handle dropdown bar. Re-creates every figure with new version
 @app.callback(
     dash.dependencies.Output('figA','figure'),
     dash.dependencies.Output('figB', 'figure'),
@@ -121,18 +126,15 @@ app.layout = html.Div(children=[
     dash.dependencies.Output('figH','figure'),
     dash.dependencies.Output('figI','figure'),
     [dash.dependencies.Input('versionSelector', 'value')])
+
 def update_graphs(version_value):
-    print(version_value)
     current_df = df[df['Version'] == version_value]
-    print(current_df)
     return fig4a.functionfigA(current_df),\
            fig4b.functionfigB(current_df),\
            fig4c.functionfigC(current_df),\
            fig4f.functionfigF(current_df),\
            fig4h.functionfigH(current_df),\
            fig4i.functionfigI(current_df)
-
-
 
 if __name__ =='__main__':
     app.run_server(debug=True)
