@@ -40,7 +40,7 @@ options = [value for key, value in version_dict.items()]
 
 
 #Calling all figures from different Python files with initial Version of database:
-current_df = df[df['Version']==versions[1]]
+current_df = df[df['Version']==versions[0]]
 figA = fig4a.functionfigA(current_df)
 figB = fig4b.functionfigB(current_df)
 figC = fig4c.functionfigC(current_df)
