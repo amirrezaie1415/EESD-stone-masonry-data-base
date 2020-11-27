@@ -41,6 +41,7 @@ options = [value for key, value in version_dict.items()]
 
 #Calling all figures from different Python files with initial Version of database:
 current_df = df[df['Version']==versions[1]]
+current_df = df
 figA = fig4a.functionfigA(current_df)
 figB = fig4b.functionfigB(current_df)
 figC = fig4c.functionfigC(current_df)
@@ -128,7 +129,8 @@ app.layout = html.Div(children=[
     [dash.dependencies.Input('versionSelector', 'value')])
 
 def update_graphs(version_value):
-    current_df = df[df['Version'] == version_value]
+    current_df = df
+    #current_df = df[df['Version'] == version_value]
     return fig4a.functionfigA(current_df),\
            fig4b.functionfigB(current_df),\
            fig4c.functionfigC(current_df),\
