@@ -23,11 +23,11 @@ def read_data():
     js = json.loads(r.text)
     files = js['files']
 
-    dataframes=[]
-    for f in files[0]:
-        if(f['key'].find('xls')!=-1):
-            dataframes.append(pd.read_excel(f['links']['self']))
-    df = dataframes
+    #dataframes=[]
+    #for f in files[0]:
+    #    if(f['key'].find('xls')!=-1):
+    #        dataframes.append(pd.read_excel(f['links']['self']))
+    df = pd.read_excel(files[0]['links']['self'])
     #df = pd.concat(dataframes)
     #df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
     return df
