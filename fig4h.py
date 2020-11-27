@@ -11,26 +11,26 @@ import read_data
 
 def functionfigH(df):
     dfH = df[['ID', 'Stone masonry typology', 'fc [MPa]', 'IQMip']].copy()
-    dfH.sort_values(by=['Stone masonry typology'],inplace=True)
+    dfH = dfH.fillna(0)
+    dfH['N'] = 0
 
-    # Creating the column which will contain the values of N
-    X = 1
-    Y = 1
-    N = 2
+    #Clean up fc and IQMip columns, round up values
     for index, row in dfH.iterrows():
-        X = 1
-        Y = 1
-        if (row['IQMip'] == 'NaN'):
-            X = 0
+        dfH.at[index,'IQMip'] = round(row['IQMip'] * 10) / 10
+        dfH.at[index,'fc [MPa]'] = round(row['fc [MPa]'] / 1) * 1
+
+    #get N, the size of each point
+    for index,row in dfH.iterrows():
+        # print(row['ID'], row['IQMip'], row['fc [MPa]'])
+        # print(dfH[(dfH['IQMip']==row['IQMip']) & (dfH['fc [MPa]']==row['fc [MPa]'])])
+        N = len(dfH[(dfH['IQMip']==row['IQMip']) & (dfH['fc [MPa]']==row['fc [MPa]'])])
+        if(N== 0):
+            dfH.at[index,'N']= 1
         else:
-            X = 1
-        if (row['fc [MPa]'] == 'NaN'):
-            Y = 0
-        else:
-            Y = 1
-        if (X + Y < 2):
-            N = 1
-        dfH['N'] = math.sqrt(N) * 12
+            dfH.at[index, 'N'] = 16*(N**(1./4))
+
+    dfH = dfH.drop_duplicates(subset=['IQMip','fc [MPa]'])
+    dfH.sort_values(by=['Stone masonry typology'],inplace=True)
     figure = px.scatter(
         dfH,
         x='IQMip',
@@ -48,5 +48,8 @@ def functionfigH(df):
          'font': {'color': '#7f7f7f'}}
     )
 
-    figure.update_traces(marker=dict(size=dfH['N']))
+    figure.update_traces(marker=dict(size=dfH['N'],opacity=1))
     return figure
+
+df = pd.read_excel('C:/Users/patri/Documents/Vanin et al. (2017) StoneMasonryDatabase.xls', index_col=None)
+functionfigH(df).show()
