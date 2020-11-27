@@ -12,7 +12,7 @@ import json
 # !!! Files are sorted by Version, which should follow the format YYYY.MM.DD
 
 def read_data():
-    doi = '10.5281/zenodo.4291405'
+    doi = '10.5281/zenodo.812145'
     url = 'https://doi.org/' + doi
     r = requests.get(url)
     recordID = r.url.split('/')[-1]
@@ -23,19 +23,21 @@ def read_data():
     js = json.loads(r.text)
     files = js['files']
 
-    dataframes=[]
+
+    #While the database doesn't have a 'Version' Column, use this code:
     for f in files:
         if(f['key'].find('xls')!=-1):
-            dataframes.append(pd.read_excel(f['links']['self']))
-    df = pd.concat(dataframes)
-    df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
+            df = pd.read_excel(f['links']['self'])
+            df['Version'] = '2020-01-27'
+
+    #Uncomment this part when the excel files contain the 'Version' Column with date in format YYYY-MM-DD and delete above.
+    # dataframes=[]
+    # for f in files:
+    #     if(f['key'].find('xls')!=-1):
+    #         dataframes.append(pd.read_excel(f['links']['self']))
+    # df = pd.concat(dataframes)
+    # df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
     return df
 
-#
-# df = read_data()
-#
-#
-# versions = df['Version'].unique()
-# current_df = df[df['Version']==versions[0]]
-#
-# print(current_df)
+
+#read_data()
