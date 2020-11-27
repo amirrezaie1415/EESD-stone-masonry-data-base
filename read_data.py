@@ -24,11 +24,12 @@ def read_data():
     files = js['files']
 
     dataframes=[]
-    for f in files:
+    for f in files[0]:
         if(f['key'].find('xls')!=-1):
             dataframes.append(pd.read_excel(f['links']['self']))
-    df = pd.concat(dataframes)
-    df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
+    df = dataframes
+    #df = pd.concat(dataframes)
+    #df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
     return df
 
 #

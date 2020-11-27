@@ -28,7 +28,7 @@ server = app.server
 
 #Handling the different versions and dropdown bar
 df = read_data.read_data()
-versions = df['Version'].unique() #returns an array of all the version dates, ascending.
+versions = ['2017.01.27'] #returns an array of all the version dates, ascending.
 version_dict = {}
 for i in range(0,len(versions)):
     int = (i+1)
