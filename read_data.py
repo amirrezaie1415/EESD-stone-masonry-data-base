@@ -12,7 +12,7 @@ import json
 # !!! Files are sorted by Version, which should follow the format YYYY.MM.DD
 
 def read_data():
-    doi = "10.5281/zenodo.812145"
+    doi = '10.5281/zenodo.4291405'
     url = 'https://doi.org/' + doi
     r = requests.get(url)
     recordID = r.url.split('/')[-1]
@@ -23,13 +23,12 @@ def read_data():
     js = json.loads(r.text)
     files = js['files']
 
-    #dataframes=[]
-    #for f in files[0]:
-    #    if(f['key'].find('xls')!=-1):
-    #        dataframes.append(pd.read_excel(f['links']['self']))
-    df = pd.read_excel(files[0]['links']['self'])
-    #df = pd.concat(dataframes)
-    #df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
+    dataframes=[]
+    for f in files:
+        if(f['key'].find('xls')!=-1):
+            dataframes.append(pd.read_excel(f['links']['self']))
+    df = pd.concat(dataframes)
+    df.sort_values(by=['Version','ID'],ascending=True, inplace=True)
     return df
 
 #

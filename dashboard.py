@@ -28,7 +28,7 @@ server = app.server
 
 #Handling the different versions and dropdown bar
 df = read_data.read_data()
-versions = ['2017.01.27'] #returns an array of all the version dates, ascending.
+versions = df['Version'].unique() #returns an array of all the version dates, ascending.
 version_dict = {}
 for i in range(0,len(versions)):
     int = (i+1)
@@ -41,7 +41,6 @@ options = [value for key, value in version_dict.items()]
 
 #Calling all figures from different Python files with initial Version of database:
 current_df = df[df['Version']==versions[1]]
-current_df = df
 figA = fig4a.functionfigA(current_df)
 figB = fig4b.functionfigB(current_df)
 figC = fig4c.functionfigC(current_df)
@@ -82,40 +81,39 @@ app.layout = html.Div(children=[
                                                value=versions[0],
                                                className='versionSelector')
                                   ])
-                 ]),
-                 html.Div(className='eight columns div-for-charts bg-grey',children=[
-                     #Figure A
-                     dcc.Graph(
-                         id='figA',
-                         figure=figA
-                     ),
-
-                     #Figure B
-                     dcc.Graph(
-                         id='figB',
-                         figure=figB
-                     )
-                     ,
-                     #Figure C
-                     dcc.Graph(
-                         id='figC',
-                         figure=figC
-                     ),
-                     dcc.Graph(
-                         id='figF',
-                         figure=figF
-                     )
-                     ,
-                     dcc.Graph(
-                         id='figH',
-                         figure=figH
-                     ),
-                     dcc.Graph(
-                         id='figI',
-                         figure=figI
-                     )
-                 ])
-             ])
+                 ])])
+    ,
+    html.Div(className='eight columns div-for-charts bg-grey',children=[
+        #Figure A
+        dcc.Graph(
+            id='figA',
+            figure=figA
+            ),
+        #Figure B
+        dcc.Graph(
+            id='figB',
+            figure=figB
+            )
+        ,
+        #Figure C
+        dcc.Graph(
+            id='figC',
+            figure=figC
+            ),
+        dcc.Graph(
+        id='figF',
+        figure=figF
+        )
+             ,
+        dcc.Graph(
+            id='figH',
+            figure=figH
+            ),
+        dcc.Graph(
+            id='figI',
+            figure=figI
+            )
+         ])
 ])
 
 #Section to handle dropdown bar. Re-creates every figure with new version
@@ -129,8 +127,7 @@ app.layout = html.Div(children=[
     [dash.dependencies.Input('versionSelector', 'value')])
 
 def update_graphs(version_value):
-    current_df = df
-    #current_df = df[df['Version'] == version_value]
+    current_df = df[df['Version'] == version_value]
     return fig4a.functionfigA(current_df),\
            fig4b.functionfigB(current_df),\
            fig4c.functionfigC(current_df),\
