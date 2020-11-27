@@ -23,10 +23,7 @@ def functionfigA(df):
     dfFigA = pd.DataFrame(0, index=['Lab', 'In-Situ'],
                           columns=['A', 'B', 'C', 'D', 'E', 'E1'])
 
-    # dfFigA['Lab/In-Situ']= ['Lab','In-Situ']
-
-    str = 'Lab'
-
+    #Creating the dataset for Fig A according to matlab file.
     for index, row in df.iterrows():
         if (row['Lab_/_In-situ'].find('Lab') != -1):
             if (row['Stone_masonry_typology'] == 'A'):
@@ -55,23 +52,34 @@ def functionfigA(df):
             elif (row['Stone_masonry_typology'] == 'E1'):
                 dfFigA.iloc[1, 5] += 1
 
+    #Transposing dataframe and adding a type column
     dfFigA = dfFigA.transpose()
-
     dfFigA['Type'] = ['A', 'B', 'C', 'D', 'E', 'E1']
 
-    fig = px.bar(dfFigA,
-                 x=['A', 'B', 'C', 'D', 'E', 'E1'],
-                 y=dfFigA.Lab,
-                 color=dfFigA.Type,
-                 labels=dict(
-                     index=" ",
-                     value="# Tests",
-                     variable="Lab - Masonry Type"
-                             ),
-                 template='simple_white')
+    #Figure layout
+    fig = px.bar(
+        dfFigA,
+        x=['A', 'B', 'C', 'D', 'E', 'E1'],
+        y=dfFigA.Lab,
+        color=dfFigA.Type,
+        labels=dict(
+            index=" ",
+            value="# Tests",
+            variable="Lab - Masonry Type"
+        ),
+        template='simple_white')
+
+    #Adding a second bar graph that will have In-Situ data
     fig.add_trace(go.Bar(x=['A', 'B', 'C', 'D', 'E', 'E1'], y=dfFigA['In-Situ'], name='In-Situ'))
-    fig.update_xaxes(dtick=0.25, ticks="inside")
-    fig.update_yaxes(ticks="inside",range=[0,60], showgrid=False)
+
+    #Figure layout details
+    fig.update_xaxes(
+        dtick=0.25,
+        ticks="inside")
+    fig.update_yaxes(
+        ticks="inside",
+        range=[0,60],
+        showgrid=False)
     fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
                        'paper_bgcolor': 'rgba(0, 0, 0, 0)',
                        'font':{'color':'#7f7f7f'},
@@ -90,8 +98,10 @@ def functionfigA(df):
                        }
                        }
                       )
-
-
+    #Make the bar graphs stack on each other
     fig.update_layout(barmode='stack')
-
     return fig
+
+#Uncomment if you want to run this script locally, and change the directory to your own
+# df = pd.read_excel('C:/Users/patri/Documents/Vanin et al. (2017) StoneMasonryDatabase.xls', index_col=None)
+# functionfigA(df).show()
